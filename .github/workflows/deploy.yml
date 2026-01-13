@@ -47,6 +47,7 @@ jobs:
           local-dir: ./deploy/
           server-dir: ./
           dangerous-clean-slate: false
+          log-level: verbose
           exclude: |
             **/.git*
             **/.git*/**
@@ -60,12 +61,33 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           password: ${{ secrets.SSH_PASSWORD }}
           port: 21098
+          debug: true
           script: |
+            set -x  # Enable bash verbose mode
+            echo "===== Starting deployment setup ====="
+            echo "Current directory: $(pwd)"
+            echo "Home directory: $HOME"
+
             # Navigate to application directory
+            echo "Navigating to application directory..."
             cd ~/${{ secrets.APP_DIRECTORY || 'bt_api' }}
+            echo "Current directory: $(pwd)"
+
+            # List files to verify deployment
+            echo "Files in deployment directory:"
+            ls -la
+
+            # Check if package.json exists
+            if [ -f "package.json" ]; then
+              echo "package.json found"
+            else
+              echo "ERROR: package.json not found!"
+              exit 1
+            fi
 
             # Install production dependencies
-            npm install --production
+            echo "Installing production dependencies..."
+            npm install --production --verbose
 
             # Run database migrations if you have them
             # npm run migrate
@@ -78,4 +100,4 @@ jobs:
             # pkill -f "node.*server.js" || true
             # nohup npm start > app.log 2>&1 &
 
-            echo "Deployment completed. Application should auto-restart."
+            echo "===== Deployment completed successfully ====="
