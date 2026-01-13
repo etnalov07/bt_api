@@ -36,31 +36,16 @@ jobs:
           cd deploy
           npm ci --production
 
-      - name: Run database migrations
-        run: |
-          # Add your migration command here
-          # Example: npm run migrate
-          # Or: npx knex migrate:latest
-          # Or: npx prisma migrate deploy
-          echo "Add your migration command in the workflow file"
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
-          DB_HOST: ${{ secrets.DB_HOST }}
-          DB_PORT: ${{ secrets.DB_PORT }}
-          DB_NAME: ${{ secrets.DB_NAME }}
-          DB_USER: ${{ secrets.DB_USER }}
-          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-
-      - name: Deploy via FTP
+      - name: Deploy via FTP to Namecheap
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          protocol: ${{ secrets.FTP_PROTOCOL || 'ftps' }}
-          port: ${{ secrets.FTP_PORT || 21 }}
+          protocol: ftps
+          port: 21
           local-dir: ./deploy/
-          server-dir: ${{ secrets.FTP_SERVER_DIR || './' }}
+          server-dir: ./
           dangerous-clean-slate: false
           exclude: |
             **/.git*
@@ -68,19 +53,29 @@ jobs:
             **/node_modules/**
             **/.env*
 
-      - name: Restart application
+      - name: Setup application on Namecheap
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
           password: ${{ secrets.SSH_PASSWORD }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: ${{ secrets.SSH_PORT || 22 }}
+          port: 21098
           script: |
-            cd ${{ secrets.APP_DIRECTORY }}
-            # Restart your application
-            # Examples:
-            # pm2 restart bt_api
-            # systemctl restart bt_api
-            # or your hosting provider's restart command
-            echo "Add your application restart command here"
+            # Navigate to application directory
+            cd ~/${{ secrets.APP_DIRECTORY || 'bt_api' }}
+
+            # Install production dependencies
+            npm install --production
+
+            # Run database migrations if you have them
+            # npm run migrate
+
+            # Setup/restart Node.js application using Namecheap's method
+            # Namecheap uses the 'Application root' and 'Application URL'
+            # The server automatically detects and runs your entry point
+
+            # Optional: If you need to manually restart
+            # pkill -f "node.*server.js" || true
+            # nohup npm start > app.log 2>&1 &
+
+            echo "Deployment completed. Application should auto-restart."
