@@ -45,7 +45,7 @@ jobs:
           protocol: ftps
           port: 21
           local-dir: ./deploy/
-          server-dir: ./
+          server-dir: ./${{ secrets.APP_DIRECTORY || 'bt_api' }}/
           dangerous-clean-slate: false
           log-level: verbose
           exclude: |
