@@ -30,14 +30,14 @@ app.get('/health', (req: Request, res: Response) => {
 });
 
 // API Routes
-app.use('/api/auth', authRoutes);
-app.use('/api/teams', teamRoutes);
-app.use('/api/players', playerRoutes);
-app.use('/api/games', gameRoutes);
-app.use('/api/at-bats', atBatRoutes);
-app.use('/api/pitches', pitchRoutes);
-app.use('/api/plays', playRoutes);
-app.use('/api/analytics', analyticsRoutes);
+app.use('/auth', authRoutes);
+app.use('/teams', teamRoutes);
+app.use('/players', playerRoutes);
+app.use('/games', gameRoutes);
+app.use('/at-bats', atBatRoutes);
+app.use('/pitches', pitchRoutes);
+app.use('/plays', playRoutes);
+app.use('/analytics', analyticsRoutes);
 
 // 404 handler
 app.use((req: Request, res: Response) => {
