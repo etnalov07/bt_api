@@ -68,6 +68,20 @@ jobs:
             echo "Current directory: $(pwd)"
             echo "Home directory: $HOME"
 
+            # Source Node.js environment (Namecheap cPanel creates this)
+            if [ -f ~/.bashrc ]; then
+              source ~/.bashrc
+            fi
+
+            # Load nvm if available
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+
+            # Check Node.js and npm availability
+            echo "Node.js version: $(node --version 2>&1 || echo 'not found')"
+            echo "npm version: $(npm --version 2>&1 || echo 'not found')"
+            echo "npm location: $(which npm 2>&1 || echo 'not found')"
+
             # Navigate to application directory
             echo "Navigating to application directory..."
             cd ~/${{ secrets.APP_DIRECTORY || 'bt_api' }}
@@ -92,12 +106,6 @@ jobs:
             # Run database migrations if you have them
             # npm run migrate
 
-            # Setup/restart Node.js application using Namecheap's method
-            # Namecheap uses the 'Application root' and 'Application URL'
-            # The server automatically detects and runs your entry point
-
-            # Optional: If you need to manually restart
-            # pkill -f "node.*server.js" || true
-            # nohup npm start > app.log 2>&1 &
-
+            # Namecheap automatically restarts Node.js apps when files change
             echo "===== Deployment completed successfully ====="
+            echo "Note: Namecheap will automatically restart your Node.js application"
