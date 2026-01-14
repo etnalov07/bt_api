@@ -20,7 +20,7 @@ jobs:
           node-version: '20'
           cache: 'npm'
 
-      - name: Install dependencies
+      - name: Install dependencies (including devDependencies for build)
         run: npm ci
 
       - name: Build TypeScript
@@ -32,7 +32,9 @@ jobs:
           cp -r dist/* deploy/
           cp package.json deploy/
           cp package-lock.json deploy/
-          # Create production-only node_modules
+
+      - name: Install production dependencies in deploy folder
+        run: |
           cd deploy
           npm ci --production
 
