@@ -2,7 +2,11 @@ import app from './app';
 import { config } from './config/env';
 import pool from './config/database';
 
+console.log('🔄 Server script starting...');
+console.log('🔄 Imports completed');
+
 const PORT = config.port;
+console.log(`✅ PORT set to ${PORT}`);
 
 // Test database connection before starting server
 pool.query('SELECT NOW()', (err, res) => {
