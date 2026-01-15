@@ -45,15 +45,15 @@ app.get('/health', (req: Request, res: Response) => {
   });
 });
 
-// API Routes
-app.use('/auth', authRoutes);
-app.use('/teams', teamRoutes);
-app.use('/players', playerRoutes);
-app.use('/games', gameRoutes);
-app.use('/at-bats', atBatRoutes);
-app.use('/pitches', pitchRoutes);
-app.use('/plays', playRoutes);
-app.use('/analytics', analyticsRoutes);
+// API Routes (prefixed with /bt-api for Namecheap routing)
+app.use('/bt-api/auth', authRoutes);
+app.use('/bt-api/teams', teamRoutes);
+app.use('/bt-api/players', playerRoutes);
+app.use('/bt-api/games', gameRoutes);
+app.use('/bt-api/at-bats', atBatRoutes);
+app.use('/bt-api/pitches', pitchRoutes);
+app.use('/bt-api/plays', playRoutes);
+app.use('/bt-api/analytics', analyticsRoutes);
 
 // 404 handler
 app.use((req: Request, res: Response) => {
