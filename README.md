@@ -98,14 +98,14 @@ A comprehensive REST API for tracking baseball pitches, managing games, and prov
 - `GET /api/players/:id/stats` - Get player stats
 
 ### Games
-- `POST /api/games` - Create game
-- `GET /api/games/:id` - Get game by ID
-- `GET /api/games/team/:teamId` - Get games by team
-- `POST /api/games/:id/start` - Start game
-- `PUT /api/games/:id/score` - Update score
-- `POST /api/games/:id/advance-inning` - Advance to next inning
-- `POST /api/games/:id/end` - End game
-- `GET /api/games/:id/innings` - Get game innings
+- `POST /api/game` - Create game
+- `GET /api/game/:id` - Get game by ID
+- `GET /api/game/team/:teamId` - Get games by team
+- `POST /api/game/:id/start` - Start game
+- `PUT /api/game/:id/score` - Update score
+- `POST /api/game/:id/advance-inning` - Advance to next inning
+- `POST /api/game/:id/end` - End game
+- `GET /api/game/:id/innings` - Get game innings
 
 ### At-Bats
 - `POST /api/at-bats` - Create at-bat
@@ -202,7 +202,7 @@ The API is designed for real-time game tracking with these key workflows:
 
 ```javascript
 // 1. Start a game
-POST /api/games/:gameId/start
+POST /api/game/:gameId/start
 
 // 2. Create an at-bat
 POST /api/at-bats
