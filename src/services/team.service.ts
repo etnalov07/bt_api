@@ -10,19 +10,19 @@ export class TeamService {
       throw new Error('Team name is required');
     }
 
-    const teamId = uuidv4();
+    const team_id = uuidv4();
     const result = await query(
       `INSERT INTO teams (id, name, owner_id, organization, age_group, season)
        VALUES ($1, $2, $3, $4, $5, $6)
        RETURNING *`,
-      [teamId, name, userId, organization, age_group, season]
+      [team_id, name, userId, organization, age_group, season]
     );
 
     return result.rows[0];
   }
 
-  async getTeamById(teamId: string): Promise<Team | null> {
-    const result = await query('SELECT * FROM teams WHERE id = $1', [teamId]);
+  async getTeamById(team_id: string): Promise<Team | null> {
+    const result = await query('SELECT * FROM teams WHERE id = $1', [team_id]);
     return result.rows[0] || null;
   }
 
@@ -39,9 +39,9 @@ export class TeamService {
     return result.rows;
   }
 
-  async updateTeam(teamId: string, userId: string, updates: Partial<Team>): Promise<Team> {
+  async updateTeam(team_id: string, userId: string, updates: Partial<Team>): Promise<Team> {
     // Verify ownership
-    const team = await this.getTeamById(teamId);
+    const team = await this.getTeamById(team_id);
     if (!team) {
       throw new Error('Team not found');
     }
@@ -59,15 +59,15 @@ export class TeamService {
            season = COALESCE($4, season)
        WHERE id = $5
        RETURNING *`,
-      [name, organization, age_group, season, teamId]
+      [name, organization, age_group, season, team_id]
     );
 
     return result.rows[0];
   }
 
-  async deleteTeam(teamId: string, userId: string): Promise<void> {
+  async deleteTeam(team_id: string, userId: string): Promise<void> {
     // Verify ownership
-    const team = await this.getTeamById(teamId);
+    const team = await this.getTeamById(team_id);
     if (!team) {
       throw new Error('Team not found');
     }
@@ -75,18 +75,18 @@ export class TeamService {
       throw new Error('Unauthorized: You do not own this team');
     }
 
-    await query('DELETE FROM teams WHERE id = $1', [teamId]);
+    await query('DELETE FROM teams WHERE id = $1', [team_id]);
   }
 
-  async getTeamWithPlayers(teamId: string): Promise<any> {
-    const teamResult = await query('SELECT * FROM teams WHERE id = $1', [teamId]);
+  async getTeamWithPlayers(team_id: string): Promise<any> {
+    const teamResult = await query('SELECT * FROM teams WHERE id = $1', [team_id]);
     if (teamResult.rows.length === 0) {
       throw new Error('Team not found');
     }
 
     const playersResult = await query(
       'SELECT * FROM players WHERE team_id = $1 AND is_active = true ORDER BY jersey_number',
-      [teamId]
+      [team_id]
     );
 
     return {

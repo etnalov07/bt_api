@@ -30,8 +30,8 @@ export class PlayerController {
 
   async getPlayersByTeam(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
     try {
-      const { teamId } = req.params;
-      const players = await playerService.getPlayersByTeam(teamId as string);
+      const { team_id } = req.params;
+      const players = await playerService.getPlayersByTeam(team_id as string);
       res.status(200).json({ players });
     } catch (error) {
       next(error);

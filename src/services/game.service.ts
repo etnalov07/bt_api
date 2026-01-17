@@ -44,7 +44,7 @@ export class GameService {
     return gameResult.rows[0];
   }
 
-  async getGamesByTeam(teamId: string): Promise<Game[]> {
+  async getGamesByTeam(team_id: string): Promise<Game[]> {
     const result = await query(
       `SELECT g.*, 
               ht.name as home_team_name, 
@@ -54,7 +54,7 @@ export class GameService {
        JOIN teams at ON g.away_team_id = at.id
        WHERE g.home_team_id = $1 OR g.away_team_id = $1
        ORDER BY g.game_date DESC, g.game_time DESC`,
-      [teamId]
+      [team_id]
     );
     return result.rows;
   }
@@ -124,13 +124,13 @@ export class GameService {
 
       // Create new inning record
       const inningId = uuidv4();
-      const battingTeamId = newHalf === 'top' ? game.away_team_id : game.home_team_id;
-      const pitchingTeamId = newHalf === 'top' ? game.home_team_id : game.away_team_id;
+      const battingteam_id = newHalf === 'top' ? game.away_team_id : game.home_team_id;
+      const pitchingteam_id = newHalf === 'top' ? game.home_team_id : game.away_team_id;
 
       await client.query(
         `INSERT INTO innings (id, game_id, inning_number, half, batting_team_id, pitching_team_id)
          VALUES ($1, $2, $3, $4, $5, $6)`,
-        [inningId, gameId, newInning, newHalf, battingTeamId, pitchingTeamId]
+        [inningId, gameId, newInning, newHalf, battingteam_id, pitchingteam_id]
       );
 
       return gameResult.rows[0];

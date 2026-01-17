@@ -9,7 +9,7 @@ router.use(authenticateToken);
 
 router.post('/', gameController.createGame.bind(gameController));
 router.get('/:id', gameController.getGameById.bind(gameController));
-router.get('/team/:teamId', gameController.getGamesByTeam.bind(gameController));
+router.get('/team/:team_id', gameController.getGamesByTeam.bind(gameController));
 router.post('/:id/start', gameController.startGame.bind(gameController));
 router.put('/:id/score', gameController.updateScore.bind(gameController));
 router.post('/:id/advance-inning', gameController.advanceInning.bind(gameController));

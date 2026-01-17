@@ -35,8 +35,8 @@ export class GameController {
 
   async getGamesByTeam(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
     try {
-      const { teamId } = req.params;
-      const games = await gameService.getGamesByTeam(teamId as string);
+      const { team_id } = req.params;
+      const games = await gameService.getGamesByTeam(team_id as string);
       res.status(200).json({ games });
     } catch (error) {
       next(error);

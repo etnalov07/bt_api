@@ -92,7 +92,7 @@ A comprehensive REST API for tracking baseball pitches, managing games, and prov
 ### Players
 - `POST /api/players` - Create player
 - `GET /api/players/:id` - Get player by ID
-- `GET /api/players/team/:teamId` - Get players by team
+- `GET /api/players/team/:team_id` - Get players by team
 - `PUT /api/players/:id` - Update player
 - `DELETE /api/players/:id` - Delete player
 - `GET /api/players/:id/stats` - Get player stats
@@ -100,7 +100,7 @@ A comprehensive REST API for tracking baseball pitches, managing games, and prov
 ### Games
 - `POST /api/game` - Create game
 - `GET /api/game/:id` - Get game by ID
-- `GET /api/game/team/:teamId` - Get games by team
+- `GET /api/game/team/:team_id` - Get games by team
 - `POST /api/game/:id/start` - Start game
 - `PUT /api/game/:id/score` - Update score
 - `POST /api/game/:id/advance-inning` - Advance to next inning

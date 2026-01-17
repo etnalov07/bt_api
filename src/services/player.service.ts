@@ -10,34 +10,34 @@ export class PlayerService {
       throw new Error('team_id, first_name, last_name, and primary_position are required');
     }
 
-    const playerId = uuidv4();
+    const player_id = uuidv4();
     const result = await query(
       `INSERT INTO players (id, team_id, first_name, last_name, jersey_number, primary_position, bats, throws)
        VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
        RETURNING *`,
-      [playerId, team_id, first_name, last_name, jersey_number, primary_position, bats, throws]
+      [player_id, team_id, first_name, last_name, jersey_number, primary_position, bats, throws]
     );
 
     return result.rows[0];
   }
 
-  async getPlayerById(playerId: string): Promise<Player | null> {
-    const result = await query('SELECT * FROM players WHERE id = $1', [playerId]);
+  async getPlayerById(player_id: string): Promise<Player | null> {
+    const result = await query('SELECT * FROM players WHERE id = $1', [player_id]);
     return result.rows[0] || null;
   }
 
-  async getPlayersByTeam(teamId: string): Promise<Player[]> {
+  async getPlayersByTeam(team_id: string): Promise<Player[]> {
     const result = await query(
       `SELECT * FROM players 
        WHERE team_id = $1 AND is_active = true 
        ORDER BY jersey_number, last_name`,
-      [teamId]
+      [team_id]
     );
     return result.rows;
   }
 
-  async updatePlayer(playerId: string, updates: Partial<Player>): Promise<Player> {
-    const player = await this.getPlayerById(playerId);
+  async updatePlayer(player_id: string, updates: Partial<Player>): Promise<Player> {
+    const player = await this.getPlayerById(player_id);
     if (!player) {
       throw new Error('Player not found');
     }
@@ -55,18 +55,18 @@ export class PlayerService {
            is_active = COALESCE($7, is_active)
        WHERE id = $8
        RETURNING *`,
-      [first_name, last_name, jersey_number, primary_position, bats, throws, is_active, playerId]
+      [first_name, last_name, jersey_number, primary_position, bats, throws, is_active, player_id]
     );
 
     return result.rows[0];
   }
 
-  async deletePlayer(playerId: string): Promise<void> {
+  async deletePlayer(player_id: string): Promise<void> {
     // Soft delete by setting is_active to false
-    await query('UPDATE players SET is_active = false WHERE id = $1', [playerId]);
+    await query('UPDATE players SET is_active = false WHERE id = $1', [player_id]);
   }
 
-  async getPlayerStats(playerId: string): Promise<any> {
+  async getPlayerStats(player_id: string): Promise<any> {
     const statsResult = await query(
       `SELECT 
          COUNT(ab.id) as total_at_bats,
@@ -77,7 +77,7 @@ export class PlayerService {
          SUM(ab.runs_scored) as total_runs
        FROM at_bats ab
        WHERE ab.batter_id = $1`,
-      [playerId]
+      [player_id]
     );
 
     const stats = statsResult.rows[0];
